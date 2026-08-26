@@ -1,0 +1,12 @@
+{
+  "name": "realestate-weekly-top10",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "render:full": "node scripts/render-realestate-top10.js",
+    "render:og": "node scripts/render-og-cover.js"
+  },
+  "dependencies": {
+    "puppeteer": "^23.0.0"
+  }
+}

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>부동산 주간뉴스 TOP 10</title>
+<style>
+  @font-face {
+    font-family: 'Pretendard';
+    src: local('Malgun Gothic');
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: 'Pretendard', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif;
+    background: #fdfcfa;
+    width: 600px;
+  }
+
+  /* ===== COVER ===== */
+  .cover {
+    position: relative;
+    width: 600px;
+    padding: 38px 34px 32px;
+    background: linear-gradient(135deg, #6ba0ac 0%, #588e9c 45%, #497b8c 100%);
+    overflow: hidden;
+  }
+
+  .brand-row {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .brand-row img { width: 38px; height: 38px; }
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+  .brand-name {
+    font-size: 19px;
+    font-weight: 700;
+    color: #f3e6c8;
+    letter-spacing: 0.5px;
+  }
+  .brand-sub {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .cover-title {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 30px;
+  }
+  .cover-date {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.92);
+    margin-bottom: 4px;
+  }
+  .cover-main {
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    -webkit-text-stroke: 0.6px #f3d383;
+    background: linear-gradient(90deg, #fff6d6 0%, #ffe9a8 55%, #f3d383 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .top3 {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .top3-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,0.97);
+    border-radius: 10px;
+    padding: 13px 16px;
+    box-shadow: 0 5px 14px rgba(0,0,0,0.13);
+  }
+  .top3-num {
+    flex: none;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #eecf95, #c9a15c);
+    color: #1c3f5c;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .top3-body { display: flex; flex-direction: column; gap: 3px; }
+  .top3-head {
+    font-size: 18.5px;
+    font-weight: 800;
+    color: #14213d;
+    line-height: 1.3;
+  }
+  .top3-sub {
+    font-size: 14.5px;
+    color: #6b7280;
+  }
+
+  .cover-footer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+  }
+  .cover-footer-tag {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #ffe9a8;
+  }
+
+  /* ===== LIST ===== */
+  .list-wrap {
+    width: 600px;
+    background: linear-gradient(180deg, #fefdfb 0%, #fbf8f2 55%, #f6f0e4 100%);
+    padding: 30px 34px 40px;
+  }
+  .list-item {
+    padding: 18px 0;
+    border-bottom: 1px solid #e8dcc4;
+  }
+  .list-item:last-child { border-bottom: none; }
+
+  .list-title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 7px;
+  }
+  .list-num {
+    font-size: 15px;
+    font-weight: 800;
+    color: #1a1a1a;
+    flex: none;
+    min-width: 22px;
+  }
+  .list-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #14213d;
+    line-height: 1.4;
+  }
+  .list-summary {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #5b6572;
+    margin: 0 0 9px 30px;
+  }
+  .list-source {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-left: 30px;
+    font-size: 11.5px;
+  }
+  .source-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #c9a15c;
+  }
+  .source-name {
+    color: #8a7a5c;
+    font-weight: 600;
+  }
+  .source-link {
+    color: #a3ab9c;
+  }
+
+  .doc-footer {
+    text-align: center;
+    padding: 22px 0 6px;
+    font-size: 11px;
+    color: #b6ac95;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="cover">
+    <div class="brand-row">
+      <img src="../assets/logo-transparent.png" alt="이음홈톡" />
+      <div class="brand-text">
+        <div class="brand-name">이음홈톡</div>
+        <div class="brand-sub">Weekly Real Estate Brief</div>
+      </div>
+    </div>
+
+    <div class="cover-title">
+      <div class="cover-date">8월 12일 – 8월 18일</div>
+      <div class="cover-main">부동산 주간뉴스 TOP 10</div>
+    </div>
+
+    <div class="top3">
+      <div class="top3-card">
+        <div class="top3-num">1</div>
+        <div class="top3-body">
+          <div class="top3-head">서울 아파트 평균 매매가 16억 돌파</div>
+          <div class="top3-sub">사상 첫 진입, 8개월 만에 1억 상승</div>
+        </div>
+      </div>
+      <div class="top3-card">
+        <div class="top3-num">2</div>
+        <div class="top3-body">
+          <div class="top3-head">서울 59㎡ 월세 1년새 140만원 급등</div>
+          <div class="top3-sub">"호텔 장기투숙이 더 쌀 판"</div>
+        </div>
+      </div>
+      <div class="top3-card">
+        <div class="top3-num">3</div>
+        <div class="top3-body">
+          <div class="top3-head">재건축 조합설립 기간 1년→4개월</div>
+          <div class="top3-sub">서울시 정비사업 절차 대폭 단축</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div class="cover-footer-tag">서울·수도권 핵심지 주간 브리핑</div>
+    </div>
+  </div>
+
+  <div class="list-wrap">
+
+    <div class="list-item">
+      <div class="list-title-row">
+        <span class="list-num">1</span>
+        <span class="list-title">서울 아파트 평균 매매가 사상 첫 16억원 돌파</span>
+      </div>
+      <div class="list-summary">8월 10일 기준 서울 아파트 평균 매매가격이 16억739만원을 기록하며 처음으로 16억원대에 진입했습니다. 지난해 12월 15억원을 넘어선 지 약 8개월 만이며, 강북권의 상승 속도가 강남권보다 두드러졌습니다.</div>
+      <div class="list-source"><span class="source-dot"></span><span class="source-name">헤럴드경제</span><span class="source-link">biz.heraldcorp.com</span></div>
+    </div>
+
+    <div class="list-item">
+      <div class="list-title-row">
+        <span class="list-num">2</span>
+        <span class="list-title">서울 59㎡ 월세 1년 새 140만원 급등…"호텔이 더 쌀 판"</span>
+      </div>
+      <div class="list-summary">성북구 등 서울 주요 단지 59㎡ 월세가 1년 만에 160만원대에서 270~300만원대로 급등하며 장기 호텔 투숙보다 비싼 역전 현상이 벌어지고 있습니다. 실거주 전환과 토지거래허가제 등 규제가 매물 감소를 부추긴 것으로 분석됩니다.</div>
+      <div class="list-source"><span class="source-dot"></span><span class="source-name">헤럴드경제</span><span class="source-link">biz.heraldcorp.com</span></div>
+    </div>
+
+    <div class="list-item">
+      <div class="list-title-row">
+        <span class="list-num">3</span>
+        <span class="list-title">서울시, 정비사업 조합설립 기간 '1년→4개월'로 단축</span>
+      </div>
+      <div class="list-summary">서울시가 8월 18일부터 조합설립 공정촉진절차 개선방안을 시행합니다. 구역지정 전 추진위 단계에서 동의율 75%를 채우면 정관 작성·임원 선정을 병행 처리할 수 있어, 사업 기간이 최대 245일 빨라질 전망입니다.</div>
+      <div class="list-source"><span class="source-dot"></span><span class="source-name">이데일리</span><span class="source-link">edaily.co.kr</span></div>
+    </div>
+
+    <div class="list-item">
+      <div class="list-title-row">
+        <span class="list-num">4</span>
+        <span class="list-title">서울 아파트값 8월 3주 0.22%↑…상승폭 확대</span>
+      </div>
+      <div class="list-summary">한국부동산원의 8월 3주(17일 기준) 조사에서 서울 아파트값이 전주(0.21%) 대비 상승폭을 키웠습니다. 강북 14개구(0.30%) 상승폭이 강남 11개구(0.14%)를 웃돈 반면, 서초·강남은 오히려 하락했습니다.</div>
+      <div class="list-source"><span class="source-dot"></span><span class="source-name">시대일보</span><span class="source-link">sidae.com</span></div>
+    </div>
+
+    <div class="list-item">
+      <div class="list-title-row">
+        <span class="list-num">5</span>
+        <span class="list-title">서울 빌라도 '귀한 몸'…매물 줄고 월세 급등</span>
+      </div>
+      <div class="list-summary">정부의 비아파트 공급 확대 정책에도 서울 연립·다세대 임대차 시장은 전세·월세 매물 부족이 심화하고 있습니다. 역세권 월세 100만원 이하 투룸 매물이 자취를 감췄고, 아파트 전세 부담을 피해 빌라로 이동하는 수요가 늘었습니다.</div>
+      <div class="list-source"><span class="source-dot"></span><span class="source-name">파이낸셜뉴스</span><span class="source-link">fnnews.com</span></div>
+    </div>
+
+    <div class="list-item">
+      <div class="list-title-row">
+        <span class="list-num">6</span>
+        <span class="list-title">"세제개편에 전월세 실종될라"…서울 10억 미만 매수 증가</span>
+      </div>
+      <div class="list-summary">8월 3일 발표된 세제개편안 후폭풍으로 다주택자의 임대매물 축소 우려가 커지는 가운데, 실수요자 중심으로 서울 10억원 미만 중저가 아파트 매수가 늘어난 것으로 나타났습니다.</div>
+      <div class="list-source"><span class="source-dot"></span><span class="source-name">파이낸셜뉴스</span><span class="source-link">fnnews.com</span></div>
+    </div>
+
+    <div class="list-item">
+      <div class="list-title-row">
+        <span class="list-num">7</span>
+        <span class="list-title">30대 생애최초 매수 비중 확대, 은평구 매수세 '최대'</span>
+      </div>
+      <div class="list-summary">30대 생애최초 주택 매수 비중이 6월 55.2%에서 7월 57.0%로 늘었습니다. 은평구는 생애최초 매수 841건으로 서울 전체의 11.1%를 차지해 자치구 중 1위를 기록하는 등 강북·외곽 쏠림이 뚜렷합니다.</div>
+      <div class="list-source"><span class="source-dot"></span><span class="source-name">M이코노미뉴스</span><span class="source-link">m-economynews.com</span></div>
+    </div>
+
+    <div class="list-item">
+      <div class="list-title-row">
+        <span class="list-num">8</span>
+        <span class="list-title">서울 외곽 중저가 단지 신고가 속출</span>
+      </div>
+      <div class="list-summary">세제개편 이후 실수요가 10억원 이하 중저가 매물에 집중되면서 서울 외곽 지역에서 신고가 거래가 잇따르고 있습니다. 규제 완화 기대와 대출 여력이 맞물려 강북권 중저가 아파트에 매수세가 몰리고 있습니다.</div>
+      <div class="list-source"><span class="source-dot"></span><span class="source-name">파이낸셜뉴스</span><span class="source-link">fnnews.com</span></div>
+    </div>
+
+    <div class="list-item">
+      <div class="list-title-row">
+        <span class="list-num">9</span>
+        <span class="list-title">서울 그린벨트 해제 여부에 시장 관심 집중</span>
+      </div>
+      <div class="list-summary">정부가 예고한 7만3000가구+α 규모 신규택지 공급을 둘러싸고 서울 그린벨트 해제 여부가 이번 주 부동산 시장의 핵심 화두로 떠올랐습니다. 구체적 입지 발표를 앞두고 관망세와 관심이 동시에 커지고 있습니다.</div>
+      <div class="list-source"><span class="source-dot"></span><span class="source-name">뉴스핌</span><span class="source-link">newspim.com</span></div>
+    </div>
+
+    <div class="list-item">
+      <div class="list-title-row">
+        <span class="list-num">10</span>
+        <span class="list-title">다주택자 양도세 한시완화 방안, 국회 심의 중</span>
+      </div>
+      <div class="list-summary">8월 3일 세제개편안에 담긴 다주택 양도세 중과 한시 완화(2주택 기준 +20%p→+5%p, 2027~2028년) 방안이 국회 심의를 앞두고 있습니다. 아직 확정 전 단계로 논의 결과에 따라 내용이 바뀔 수 있습니다.</div>
+      <div class="list-source"><span class="source-dot"></span><span class="source-name">한국경제</span><span class="source-link">hankyung.com</span></div>
+    </div>
+
+    <div class="doc-footer">ⓒ 이음홈톡 · Weekly Real Estate Brief</div>
+  </div>
+
+</body>
+</html>
