@@ -93,9 +93,21 @@
    netlify deploy --dir . --prod
    ```
    - 최초 1회는 `netlify login`으로 브라우저 인증 필요. 이후는 로그인 유지됨.
-   - 첫 배포 시 사이트가 랜덤 이름으로 자동 생성된다 (예: `papaya-lebkuchen-33c7e1.netlify.app`). 이후 같은 폴더에서 재배포하면 같은 도메인이 유지된다 — 새 리포트를 만들 때마다 매번 이 도메인을 재사용한다(새 사이트로 만들지 않는다).
+   - 첫 배포 시 사이트가 랜덤 이름으로 자동 생성된다 (예: `realestate-weekly-top10.netlify.app`). 이후 같은 폴더에서 재배포하면 같은 도메인이 유지된다 — 새 리포트를 만들 때마다 매번 이 도메인을 재사용한다(새 사이트로 만들지 않는다).
    - 배포 후 이 URL을 카톡에 붙여넣으면 og-image.png가 미리보기로, 클릭 시 실제 페이지로 이동한다.
 
 ## 이미지 파일만 보낼 때 (클릭 불필요, 빠르게 공유만 할 때)
 
 완성된 PNG(`output/부동산뉴스Top10_{날짜}.png`)를 카카오톡 채팅방에 이미지 파일로 직접 첨부해서 보내면 된다. 이 경우 원문 링크로는 연결되지 않는다.
+
+## 자동화 (매주 월요일 08:00 KST 자동 발행)
+
+이 프로젝트는 클라우드 크론 루틴으로 매주 자동 발행되도록 설정되어 있다. **컴퓨터가 꺼져 있어도 동작한다** (Anthropic 클라우드 인프라에서 실행되며 로컬 PC와 무관).
+
+- **GitHub 저장소**: https://github.com/hyunjkim6207-byte/realestate-weekly-top10 (public). 클라우드 에이전트는 이 저장소를 clone해서 작업한다 — 로컬 PC 파일에는 접근하지 못하므로, render 스크립트(`scripts/render-realestate-top10.js`, `scripts/render-og-cover.js`)와 `package.json`이 저장소 안에 포함되어 있다.
+- **배포 URL**: https://realestate-weekly-top10.netlify.app (Netlify 사이트 이름 = GitHub 저장소 이름으로 통일함)
+- **배포 방식**: Netlify가 이 GitHub 저장소(`master` 브랜치)에 **자동배포로 연동**되어 있다 (base directory: `netlify-deploy`). 즉 클라우드 에이전트는 `git push`만 하면 되고, Netlify API를 직접 호출할 필요가 없다 — 클라우드 샌드박스 환경은 `api.netlify.com`으로의 아웃바운드 연결(CONNECT)이 방화벽에 막혀 있어서 `netlify-cli`로 직접 배포하는 방식은 동작하지 않는다는 것이 확인됨(2026-08-26 테스트).
+- **GitHub push 권한**: 클라우드 에이전트가 이 저장소에 push하려면 Claude GitHub App이 저장소(또는 계정 전체)에 설치되어 있어야 한다 (https://github.com/apps/claude/installations/select_target 에서 설치/확인). 설치 안 돼 있으면 push가 403으로 실패한다.
+- **크론 루틴**: 이름 "부동산 주간뉴스 TOP10 자동발행", ID `trig_01FCr9TT9FJPDyAkFsWvBoDH`, 크론 `0 23 * * 0` (UTC 일요일 23시 = 월요일 08:00 KST). 관리 링크: https://claude.ai/code/routines/trig_01FCr9TT9FJPDyAkFsWvBoDH
+- 루틴 실행 시마다: (1) 그 시점 기준 지난 7일 부동산 뉴스 리서치 → (2) `output/*.html` 3종 갱신 → (3) puppeteer로 PNG 2종 렌더링(클라우드 샌드박스에서 정상 동작 확인됨, `--no-sandbox` 필요) → (4) `netlify-deploy/index.html` 재조립 → (5) git commit & push → (6) push가 Netlify 자동배포를 트리거.
+- 수동으로 지금 당장 1회 실행해보고 싶으면 `RemoteTrigger`의 `run` 액션으로 `trig_01FCr9TT9FJPDyAkFsWvBoDH`를 실행하면 된다.
