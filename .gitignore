@@ -1,2 +1,4 @@
 netlify-deploy/.netlify/
+.netlify/
+.claude/
 node_modules/
