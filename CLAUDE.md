@@ -43,7 +43,10 @@
 - **본문 배경**: 위→아래 은은한 그라데이션(`#fefdfb → #fbf8f2 → #f6f0e4`), 순백보다 살짝 밝은 크림톤 유지.
 - **Top3 카드**: 원형 골드 배지(숫자) + 흰 카드, 배경에 다른 색 얼룩(radial-gradient 장식)은 넣지 않는다 — 과거 시도에서 지저분해 보인다는 피드백으로 제거함.
 - **본문 리스트 번호(1~10)**: 검정(`#1a1a1a`). 골드로 하지 말 것 — 사용자가 명시적으로 검정 요청.
-- **로고**: `assets/logo-transparent.png` (이음홈톡 방패 로고, 배경 투명 처리됨). 원본은 `logo-mark.png`. 배경 흰색을 투명화할 때는 RGB 235 이상인 픽셀을 투명 처리하는 방식을 사용했음(Pillow).
+- **로고**: `assets/logo_iemhometok.png` (이음홈톡 원형 배지 로고, 500×500 RGBA, 모서리 투명). 2026-08-31에 기존 방패 로고(`logo-transparent.png`)에서 교체함 — 예전 로고로 되돌리지 말 것.
+  - 표시 크기: `report.html`/`artifact.html`/`netlify-deploy` 64px, `cover-only.html` 128px. 원형 배지라 `border-radius: 50%`를 함께 준다.
+  - **커버 상단에는 로고만 넣고 브랜드 텍스트는 넣지 않는다** (2026-08-31 변경). 배지 안에 이미 '이음홈톡' 글자가 들어 있어서 옆에 `.brand-text`(brand-name/brand-sub)를 두면 이름이 두 번 나온다. 관련 CSS도 제거된 상태이니 되살리지 말 것. 문서 하단 `.doc-footer`의 'ⓒ 이음홈톡 · Weekly Real Estate Brief'는 그대로 유지한다.
+  - base64 인라인용으로는 256px로 줄인 `assets/logo_iemhometok_256.png`를 쓴다 (원본 394KB는 문서에 그대로 넣기엔 큼).
 - **날짜 중복 금지**: 커버 상단(`8월 18일`)에 이미 날짜가 있으므로 `cover-footer`에는 날짜를 넣지 않는다.
 
 ## 파일 구조
@@ -51,9 +54,11 @@
 ```
 뉴스Top-10 대시보드/
 ├── CLAUDE.md              ← 이 파일
-├── logo-mark.png          ← 원본 로고 (흰 배경)
+├── logo-mark.png          ← 구 로고 원본 (흰 배경, 미사용)
 ├── assets/
-│   └── logo-transparent.png  ← 배경 투명화된 로고 (실사용)
+│   ├── logo_iemhometok.png      ← 현재 사용 로고 (원형 배지, 500px)
+│   ├── logo_iemhometok_256.png  ← base64 인라인용 축소본
+│   └── logo-transparent.png     ← 구 방패 로고 (미사용)
 ├── output/
 │   ├── report.html         ← 전체 리포트(커버+10개 리스트) 소스, 재렌더링 시 이 파일을 덮어씀
 │   ├── cover-only.html      ← 커버(로고+타이틀+Top3)만 담은 소스, OG 미리보기 이미지용
@@ -73,7 +78,7 @@
    python3 -c "
    import base64
    with open('output/artifact.html','r',encoding='utf-8') as f: html=f.read()
-   with open('assets/logo-transparent.png','rb') as f: b64=base64.b64encode(f.read()).decode('ascii')
+   with open('assets/logo_iemhometok_256.png','rb') as f: b64=base64.b64encode(f.read()).decode('ascii')
    html = html.replace('__LOGO_DATA_URI__', 'data:image/png;base64,'+b64)  # 신규 작성 시엔 img src를 __LOGO_DATA_URI__ 플레이스홀더로 넣고 치환
    with open('output/artifact.html','w',encoding='utf-8') as f: f.write(html)
    "
