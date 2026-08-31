@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "render:full": "node scripts/render-realestate-top10.js",
-    "render:og": "node scripts/render-og-cover.js"
+    "render:og": "node scripts/render-og-cover.js",
+    "render": "npm run render:full && npm run render:og",
+    "check": "node scripts/check.js"
   },
   "dependencies": {
-    "puppeteer": "^23.0.0"
+    "puppeteer": "^23.11.1"
   }
 }
