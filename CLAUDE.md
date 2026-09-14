@@ -89,7 +89,7 @@
     └── og-image.png          ← 카톡 미리보기 썸네일 (cover-only.html 렌더링 결과)
 ```
 
-`netlify.toml`은 두지 않는다 — Netlify UI에 base directory가 `netlify-deploy`로 잡혀 있어서, 저장소 루트의 `netlify.toml`은 무시되고 경로만 꼬인다.
+`netlify.toml`은 두지 않는다 — Netlify UI에 publish directory가 `netlify-deploy`로 잡혀 있어서(base는 저장소 루트), 설정을 두 곳에서 관리하면 경로만 꼬인다.
 
 ## 클릭 가능한 링크로 카톡 공유 (권장 — 뉴스 클릭 시 원문 이동)
 
@@ -135,6 +135,18 @@
 - **크론 루틴**: 이름 "부동산 주간뉴스 TOP10 자동발행", ID `trig_01FCr9TT9FJPDyAkFsWvBoDH`, 크론 `0 23 * * 0` (UTC 일요일 23시 = 월요일 08:00 KST). 관리 링크: https://claude.ai/code/routines/trig_01FCr9TT9FJPDyAkFsWvBoDH
 - 루틴 실행 시마다: (1) 그 시점 기준 지난 7일 부동산 뉴스 리서치 → (2) `output/*.html` 3종 갱신 → (3) `npm install` 후 puppeteer로 PNG 2종 렌더링(클라우드 샌드박스에서 정상 동작 확인됨, `--no-sandbox` 필요) → (4) `netlify-deploy/index.html` 재조립 → (5) `npm run check` → (6) git commit & push → (7) push가 Netlify 자동배포를 트리거.
 - 수동으로 지금 당장 1회 실행해보고 싶으면 `RemoteTrigger`의 `run` 액션으로 `trig_01FCr9TT9FJPDyAkFsWvBoDH`를 실행하면 된다.
+
+### 카카오톡 "나와의 채팅" 자동 발송 (2026-09-14 추가)
+
+프로덕션 배포가 성공하면 `netlify/functions/deploy-succeeded.mjs`(Netlify 이벤트 함수)가 자동 실행돼, 새 발행분 링크 카드(OG 썸네일 + og:title/description + "이번 주 TOP 10 보기" 버튼)를 사용자 본인 카톡 "나와의 채팅"으로 보낸다. 루틴·사람이 따로 할 일은 없다 — `git push`만 하면 된다.
+
+- **중복 방지**: 방금 배포된 버전의 `.cover-date`를 읽어 Netlify Blobs `kakao/last_sent`와 비교하고, 같으면 보내지 않는다. 로고·오타 수정 재배포로는 재발송되지 않는다. 같은 주를 **일부러 다시 보내려면** `netlify blobs:delete kakao last_sent` 후 재배포한다.
+- **카카오 앱**: "부동산 뉴스 Top10" (ID 1576670), REST API 키 `5481ca…`. 클라이언트 시크릿 사용 중. 로그인 리다이렉트 URI = `https://realestate-weekly-top10.netlify.app/`.
+- **비밀값 위치**: `KAKAO_REST_KEY`, `KAKAO_CLIENT_SECRET`은 Netlify 환경변수, refresh token은 Netlify Blobs `kakao/refresh_token`. **공개 저장소이므로 코드·문서·커밋에 절대 넣지 않는다** (`assets/*.docx` 메모는 `.gitignore` 처리됨).
+- **토큰 수명**: refresh token 60일. 매주 발송 때 갱신되고, 만료가 1개월 미만 남으면 카카오가 새 토큰을 줘서 함수가 Blobs에 덮어쓴다 → 매주 발행이 이어지는 한 재인증 불필요.
+- **재인증** (발송이 멈췄거나 함수 로그에 "재인증 필요"가 찍혔을 때): `npm run kakao:auth`로 인가 URL 출력 → 브라우저 로그인·동의 → 주소창 `?code=` 값을 `npm run kakao:auth -- <code>`로 넘긴다. (code는 몇 분 안에 만료되는 1회용.)
+- **로그 확인**: Netlify 관리화면 → Logs → Functions → `deploy-succeeded` (`[kakao-notify] sent/skip: …`).
+- 루트에 `netlify/functions/`가 있는 이유: Netlify base directory는 저장소 루트이고 `netlify-deploy`는 publish 디렉터리일 뿐이다. 함수 소스를 publish 폴더 밖에 둬야 웹에 노출되지 않는다.
 
 ### 알려진 특이사항
 

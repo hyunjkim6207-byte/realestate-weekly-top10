@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "realestate-weekly-top10",
   "version": "1.0.0",
   "private": true,
@@ -6,9 +6,11 @@
     "render:full": "node scripts/render-realestate-top10.js",
     "render:og": "node scripts/render-og-cover.js",
     "render": "npm run render:full && npm run render:og",
-    "check": "node scripts/check.js"
+    "check": "node scripts/check.js",
+    "kakao:auth": "node scripts/kakao-auth.js"
   },
   "dependencies": {
+    "@netlify/blobs": "^11.0.3",
     "puppeteer": "^23.11.1"
   }
 }

@@ -2,3 +2,7 @@ netlify-deploy/.netlify/
 .netlify/
 .claude/
 node_modules/
+# 카카오 키·시크릿이 들어간 개인 메모 (공개 저장소라 절대 커밋 금지)
+assets/*.docx
+assets/~$*
+.env
